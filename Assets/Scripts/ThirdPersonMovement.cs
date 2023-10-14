@@ -8,6 +8,7 @@ public class ThirdPersonMovement : MonoBehaviour
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
+    public float wallrunSpeed;
 
     public float groundDrag;
 
@@ -59,9 +60,12 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         walking,
         sprinting,
+        wallruning,
         crouching,
         air
     }
+
+    public bool wallrunning;
 
     private void Start()
     {
@@ -120,12 +124,13 @@ public class ThirdPersonMovement : MonoBehaviour
         // start crouch
         if(Input.GetKeyDown(crouchKey))
         {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            
         }
 
         // Stop crouch
-        if (Input.GetKeyUp(crouchKey))
+        if (Input.GetKeyUp(crouchKey) && grounded)
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
@@ -140,6 +145,13 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
+        }
+
+        // Mode - wallrunning
+        if(wallrunning)
+        {
+            state = MovementState.wallruning;
+            moveSpeed = wallrunSpeed; 
         }
 
         //Mode - Sprinting
