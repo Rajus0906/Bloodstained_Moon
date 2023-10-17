@@ -38,13 +38,13 @@ public class WallRunning : MonoBehaviour
 
     [Header("References")]
     public Transform orientation;
-    private ThirdPersonMovement tpm;
+    private PlayerMovement pm;
     private Rigidbody rb;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        tpm = GetComponent<ThirdPersonMovement>();
+        pm = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -55,7 +55,7 @@ public class WallRunning : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (tpm.wallrunning)
+        if (pm.wallrunning)
             WallRunningMovement();
     }
 
@@ -82,7 +82,7 @@ public class WallRunning : MonoBehaviour
         // State 1 - Wallrunning
         if ((wallLeft || wallRight) && verticalInput > 0 && AboveGround() && !exitingWall)
         {
-            if (!tpm.wallrunning)
+            if (!pm.wallrunning)
                 StartWallRun();
 
             // wall jump
@@ -92,7 +92,7 @@ public class WallRunning : MonoBehaviour
         // State 2 - Exit wall
         else if (exitingWall)
         {
-            if(tpm.wallrunning)
+            if(pm.wallrunning)
                 StopWallRun();
 
             if (exitWallTimer > 0)
@@ -105,14 +105,14 @@ public class WallRunning : MonoBehaviour
         // State 3 - None
         else
         {
-            if (tpm.wallrunning)
+            if (pm.wallrunning)
                 StopWallRun();
         }
     }
 
     private void StartWallRun()
     {
-        tpm.wallrunning = true;
+        pm.wallrunning = true;
     }
 
     private void WallRunningMovement()
@@ -143,7 +143,7 @@ public class WallRunning : MonoBehaviour
 
     private void StopWallRun()
     {
-        tpm.wallrunning = false;
+        pm.wallrunning = false;
     }
 
     private void WallJump()
