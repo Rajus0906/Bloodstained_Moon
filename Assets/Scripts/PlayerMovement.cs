@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
-    public float sprintSpeed;
     public float wallrunSpeed;
 
     private float desiredMoveSpeed;
@@ -58,7 +57,6 @@ public class PlayerMovement : MonoBehaviour
     public enum MovementState
     {
         walking,
-        sprinting,
         crouching,
         wallruning,
         air
@@ -145,14 +143,9 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = wallrunSpeed;
         }
 
-        // Mode - Sprinting
-        else if (grounded && Input.GetKey(sprintKey))
-        {
-            state = MovementState.sprinting;
-            desiredMoveSpeed = sprintSpeed;
-        }
+ 
 
-        // Mode - Walking
+        // Mode - movement
         else if (grounded)
         {
             state = MovementState.walking;
