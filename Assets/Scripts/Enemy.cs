@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+   
+
     [Header("Movement")]
     public float speed = 5;
     public float waitTime = .3f;
@@ -18,7 +21,10 @@ public class Enemy : MonoBehaviour
     public float viewDistace;
     public LayerMask viewMask;
     private float viewAngle;
+    private float playerVisableTimer;
     Color originalSLColour;
+
+    public float timeToSpotPlayer = .5f;
 
     
 
@@ -42,12 +48,16 @@ public class Enemy : MonoBehaviour
     {
         if (CanSeePlayer())
         {
-            spotLight.color = Color.red;
+            playerVisableTimer += Time.deltaTime;
         }
         else
         {
-            spotLight.color = originalSLColour;
+            playerVisableTimer -= Time.deltaTime;
         }
+        playerVisableTimer = Mathf.Clamp(playerVisableTimer, 0, timeToSpotPlayer);
+        spotLight.color = Color.Lerp(originalSLColour, Color.red, playerVisableTimer / timeToSpotPlayer);
+
+        
     }
 
     bool CanSeePlayer()
