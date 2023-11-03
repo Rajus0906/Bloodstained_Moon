@@ -26,7 +26,9 @@ public class Enemy : MonoBehaviour
 
     public float timeToSpotPlayer = .5f;
 
-    
+    private bool isChasingPlayer = false; // Add a flag to determine if the enemy is chasing the player
+
+
 
     void Start()
     {
@@ -49,15 +51,30 @@ public class Enemy : MonoBehaviour
         if (CanSeePlayer())
         {
             playerVisableTimer += Time.deltaTime;
+            
+            if (playerVisableTimer >= timeToSpotPlayer)
+            {
+                isChasingPlayer = true; // Player is spotted, start chasing
+            }
         }
         else
         {
             playerVisableTimer -= Time.deltaTime;
+            
+            isChasingPlayer = false; // Player is not visible, stop chasing
         }
+        
         playerVisableTimer = Mathf.Clamp(playerVisableTimer, 0, timeToSpotPlayer);
         spotLight.color = Color.Lerp(originalSLColour, Color.red, playerVisableTimer / timeToSpotPlayer);
 
-        
+        if (isChasingPlayer)
+        {
+            // Add code to follow the player here
+            // For example, you can use a function like MoveTowardsPlayer()
+            MoveTowardsPlayer();
+        }
+
+
     }
 
     bool CanSeePlayer()
@@ -78,8 +95,26 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
+    void MoveTowardsPlayer()
+    {
+        // Calculate the direction towards the player
+        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        float angleBetweenGuardAndPlayer = Vector3.Angle(transform.forward, dirToPlayer);
 
-    
+        if (angleBetweenGuardAndPlayer < viewAngle / 2f)
+        {
+            // You can use the following code to move towards the player
+            // This code assumes that 'speed' is the desired chasing speed
+            transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+
+            //make the enemy look in the player's direction
+            transform.LookAt(player);
+        }
+    }
+
+
+
+
     IEnumerator FollowPath(Vector3[] waypoints)
     {
         transform.position = waypoints[0];
