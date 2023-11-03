@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -16,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     public float slopeIncreaseMultiplier;
 
     public float groundDrag;
+
+    public float climbSpeed;
 
     [Header("Jumping")]
     public float jumpForce;
@@ -53,19 +56,33 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    [Header("Reference")]
+    public Climbing climbingScript;
+
     
 
     public MovementState state;
     public enum MovementState
     {
+        freeze,
+        ulimited,
         walking,
         crouching,
+        climbing,
         wallruning,
         air
     }
 
-    public bool sliding;
+    
+    public bool crouching;
     public bool wallrunning;
+    public bool climbing;
+
+    public bool freeze;
+    public bool unlimited;
+
+    public bool restricted;
+
 
     private void Start()
     {
@@ -139,15 +156,40 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.crouching;
             desiredMoveSpeed = crouchSpeed;
         }
+       
+        // Mode - Climbing
+        if (climbing)
+        {
+            state = MovementState.climbing;
+            desiredMoveSpeed = climbSpeed;
+        }
 
         // Mode - wallrunning
-        if (wallrunning)
+        else if (wallrunning)
         {
             state = MovementState.wallruning;
             moveSpeed = wallrunSpeed;
         }
 
- 
+        //Mode - Freeze
+        if (freeze)
+        {
+            state = MovementState.freeze;
+            rb.velocity = Vector3.zero;
+        }
+
+        //Mode - Unlimited
+        if (unlimited)
+        {
+            state = MovementState.ulimited;
+            moveSpeed = 999f;
+            return;
+            
+        }
+
+
+
+
 
         // Mode - movement
         else if (grounded)
@@ -205,6 +247,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if(climbingScript.exitingWall)
+        {
+            return;
+        }
+
+        if(restricted)
+        {
+            return;
+        }
+
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 

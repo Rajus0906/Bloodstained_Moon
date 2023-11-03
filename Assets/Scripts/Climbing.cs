@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.XR;
 using UnityEngine;
 
 public class Climbing : MonoBehaviour
@@ -18,6 +17,14 @@ public class Climbing : MonoBehaviour
 
     private bool climbing;
 
+    [Header("ClimbJumping")]
+    public float climbJumpUpForce;
+    public float climbJumpBackForce;
+
+    public KeyCode jumpKey = KeyCode.Space;
+    public int climbJumps;
+    private int climbJumpsLeft;
+
     [Header("Detection")]
     public float detectionLength;
     public float sphereCastRadius;
@@ -27,54 +34,51 @@ public class Climbing : MonoBehaviour
     private RaycastHit frontWallHit;
     private bool wallFront;
 
+    private Transform lastWall;
+    private Vector3 lastWallNormal;
+    public float minWallNormalAngleChange;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Exiting")]
+    public bool exitingWall;
+    public float exitWallTime;
+    private float exitWallTimer;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         WallCheck();
         StateMachine();
 
-        if (climbing)
-        {
-            ClimbingMovement();
-        }
+        if (climbing && !exitingWall) ClimbingMovement();
     }
 
     private void StateMachine()
     {
-        //State 1 - Climbing
-        if (wallFront && Input.GetKey(KeyCode.W) && wallLookAngle < maxWallLookAngle)
+        // State 1 - Climbing
+        if (wallFront && Input.GetKey(KeyCode.W) && wallLookAngle < maxWallLookAngle && !exitingWall)
         {
-            if (!climbing && climbTimer > 0) 
-            {
-                StartClimbing();
-            }
+            if (!climbing && climbTimer > 0) StartClimbing();
 
-            if ( climbTimer > 0)
-            {
-                climbTimer -= Time.deltaTime;
-            }
-
-            if (climbTimer < 0)
-            {
-                StopClimbing();
-            }
+            // timer
+            if (climbTimer > 0) climbTimer -= Time.deltaTime;
+            if (climbTimer < 0) StopClimbing();
         }
 
-        //State 3 - None
+        // State 2 - Exiting
+        else if (exitingWall)
+        {
+            if (climbing) StopClimbing();
+
+            if (exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
+            if (exitWallTimer < 0) exitingWall = false;
+        }
+
+        // State 3 - None
         else
         {
-            if (climbing)
-            {
-                StopClimbing();
-            }
+            if (climbing) StopClimbing();
         }
+
+        if (wallFront && Input.GetKeyDown(jumpKey) && climbJumpsLeft > 0) ClimbJump();
     }
 
     private void WallCheck()
@@ -82,28 +86,58 @@ public class Climbing : MonoBehaviour
         wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
         wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
-        if(pm.grounded)
+        bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
+
+        if ((wallFront && newWall) || pm.grounded)
         {
             climbTimer = maxClimbTime;
+            climbJumpsLeft = climbJumps;
         }
     }
+
+ 
 
     private void StartClimbing()
     {
         climbing = true;
+        pm.climbing = true;
 
-        //Cha
+        lastWall = frontWallHit.transform;
+        lastWallNormal = frontWallHit.normal;
+
+        /// idea - camera fov change
     }
 
     private void ClimbingMovement()
     {
         rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z);
 
-        //play sound while climbing
+        /// idea - sound effect
     }
 
     private void StopClimbing()
     {
         climbing = false;
+        pm.climbing = false;
+
+        /// idea - particle effect
+        /// idea - sound effect
     }
+
+    private void ClimbJump()
+    {
+        exitingWall = true;
+        exitWallTimer = exitWallTime;
+      
+
+        Vector3 forceToApply = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
+
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(forceToApply, ForceMode.Impulse);
+
+        climbJumpsLeft--;
+    }
+
+    
+
 }
