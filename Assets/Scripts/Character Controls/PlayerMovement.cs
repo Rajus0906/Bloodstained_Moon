@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public float slopeIncreaseMultiplier;
 
     public float groundDrag;
-
+    public Transform orientation;
     public float climbSpeed;
 
     [Header("Jumping")]
@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
+   
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
@@ -47,7 +47,14 @@ public class PlayerMovement : MonoBehaviour
     private bool exitingSlope;
 
 
-    public Transform orientation;
+    [Header("Sound Effects")]
+    public AudioSource jumpSound;
+    public AudioSource runSound;
+
+
+
+
+
 
     float horizontalInput;
     float verticalInput;
@@ -128,6 +135,8 @@ public class PlayerMovement : MonoBehaviour
             readyToJump = false;
 
             Jump();
+            //Play sound when jumping 
+            jumpSound.Play();
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -194,6 +203,7 @@ public class PlayerMovement : MonoBehaviour
         // Mode - movement
         else if (grounded)
         {
+            
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
         }
@@ -247,7 +257,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        if(climbingScript.exitingWall)
+        
+        if (climbingScript.exitingWall)
         {
             return;
         }
@@ -273,9 +284,27 @@ public class PlayerMovement : MonoBehaviour
         else if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
+        // Play the run sound when grounded and moving
+        if (moveDirection.magnitude > 0.1f && !runSound.isPlaying)
+        {
+            runSound.Play();
+        }
+
+        // Stop the run sound when not moving
+        else if (moveDirection.magnitude < 0.1f && runSound.isPlaying)
+        {
+            runSound.Stop();
+        }
+
         // in air
         else if (!grounded)
+        {
+
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            runSound.Stop();
+
+        }
+
 
         // turn gravity off while on slope
         rb.useGravity = !OnSlope();

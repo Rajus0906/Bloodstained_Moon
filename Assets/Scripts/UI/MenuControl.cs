@@ -16,12 +16,17 @@ public class MenuControl : MonoBehaviour
 
     public void PlayGame()
     {
+        SceneManager.LoadScene("GameScene"); //this will have the name of your main game scene
+    }
+
+    public void PlayTutorial()
+    {
         SceneManager.LoadScene("TutorialScene"); //this will have the name of your main game scene
     }
 
     public void PlayAgain()
     {
-        SceneManager.LoadScene("GameScreen");
+        SceneManager.LoadScene("GameScene");
     }
 
     public void Quit()
