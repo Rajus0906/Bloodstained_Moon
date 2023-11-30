@@ -50,6 +50,8 @@ GameObject:
   - component: {fileID: 4823241242943404007}
   - component: {fileID: 5584856484420343577}
   - component: {fileID: 2399444264314458365}
+  - component: {fileID: 7297808896873700006}
+  - component: {fileID: 3590428031155675862}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -157,7 +159,7 @@ MonoBehaviour:
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   grounded: 0
   maxSlopeAngle: 102.5
   jumpSound: {fileID: 2399444264314458365}
@@ -200,6 +202,7 @@ MonoBehaviour:
   minJumpHeight: 2
   exitWallTime: 0.2
   orientation: {fileID: 6505800021212398188}
+  jumpSound: {fileID: 2399444264314458365}
 --- !u!114 &3395572289870344760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,6 +456,31 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7297808896873700006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2231019579706016856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff129ca600503b48a81228363006e69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnPoint: {x: -68.61, y: 7.226, z: 12.473}
+--- !u!114 &3590428031155675862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2231019579706016856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6532bf1bd421b488eca3ec02b235e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3872407202800402822
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,7 +505,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3872407202800402822}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.09973529, y: -1.0457939, z: 7.291513}
+  m_LocalPosition: {x: 0, y: 0.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -496,6 +524,7 @@ GameObject:
   - component: {fileID: 4495512518776331864}
   - component: {fileID: 3024857935340791808}
   - component: {fileID: 2701189741866024838}
+  - component: {fileID: 2381815906797573343}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -593,6 +622,22 @@ MonoBehaviour:
   sensX: 250
   sensY: 250
   screenPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &2381815906797573343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6590529831174176564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68c772c95b6f16b4794802655afba926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  img: {fileID: 0}
+  target: {fileID: 0}
+  meter: {fileID: 0}
+  offset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &6770205726490367722
 GameObject:
   m_ObjectHideFlags: 0

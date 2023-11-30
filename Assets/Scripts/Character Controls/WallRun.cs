@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class WallRunning : MonoBehaviour
 {
@@ -41,6 +43,10 @@ public class WallRunning : MonoBehaviour
     private PlayerMovement pm;
     private Rigidbody rb;
     private LedgeGrabbing lg;
+    
+
+    [Header("Sound")]
+    public AudioSource jumpSound;
 
     private void Start()
     {
@@ -53,12 +59,16 @@ public class WallRunning : MonoBehaviour
     {
         CheckForWall();
         StateMachine();
+
+        
     }
 
     private void FixedUpdate()
     {
         if (pm.wallrunning)
             WallRunningMovement();
+
+        
     }
 
     private void CheckForWall()
@@ -88,7 +98,11 @@ public class WallRunning : MonoBehaviour
                 StartWallRun();
 
             // wall jump
-            if (Input.GetKey(jumpKey)) WallJump();
+            if (Input.GetKey(jumpKey))
+            {
+                jumpSound.Play();
+                WallJump();
+            }
         }
 
         // State 2 - Exit wall

@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-   
+
+    private PlayerRespawn playerRespawn;
+    private float respawnDelaySeconds = 2f;
 
     [Header("Movement")]
     public float speed = 5;
@@ -32,6 +34,8 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        playerRespawn = GameObject.Find("Player").GetComponent<PlayerRespawn>();
+
         player = GameObject.FindGameObjectWithTag ("Player").transform ;
         viewAngle = spotLight.spotAngle;
         originalSLColour = spotLight.color;
@@ -52,9 +56,13 @@ public class Enemy : MonoBehaviour
         {
             playerVisableTimer += Time.deltaTime;
             
+
             if (playerVisableTimer >= timeToSpotPlayer)
             {
                 isChasingPlayer = true; // Player is spotted, start chasing
+                StartCoroutine(RespawnAfterDelay());
+                //playerRespawn.RespawnNow();
+
             }
         }
         else
@@ -75,6 +83,15 @@ public class Enemy : MonoBehaviour
         }
 
 
+    }
+
+    private IEnumerator RespawnAfterDelay()
+    {
+        // Wait for a specific duration before respawning
+        yield return new WaitForSeconds(respawnDelaySeconds);
+
+        // Now respawn the player
+        playerRespawn.RespawnNow();
     }
 
     bool CanSeePlayer()
