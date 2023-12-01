@@ -47,6 +47,7 @@ public class WallRunning : MonoBehaviour
 
     [Header("Sound")]
     public AudioSource jumpSound;
+    public AudioSource runSound;
 
     private void Start()
     {
@@ -60,7 +61,8 @@ public class WallRunning : MonoBehaviour
         CheckForWall();
         StateMachine();
 
-        
+       
+
     }
 
     private void FixedUpdate()
@@ -94,6 +96,9 @@ public class WallRunning : MonoBehaviour
         // State 1 - Wallrunning
         if ((wallLeft || wallRight) && verticalInput > 0 && AboveGround() && !exitingWall)
         {
+
+            
+
             if (!pm.wallrunning)
                 StartWallRun();
 
@@ -108,6 +113,7 @@ public class WallRunning : MonoBehaviour
         // State 2 - Exit wall
         else if (exitingWall)
         {
+
             if(pm.wallrunning)
                 StopWallRun();
 
@@ -129,6 +135,8 @@ public class WallRunning : MonoBehaviour
     private void StartWallRun()
     {
         pm.wallrunning = true;
+        
+        
     }
 
     private void WallRunningMovement()
@@ -160,6 +168,7 @@ public class WallRunning : MonoBehaviour
     private void StopWallRun()
     {
         pm.wallrunning = false;
+        
     }
 
     private void WallJump()

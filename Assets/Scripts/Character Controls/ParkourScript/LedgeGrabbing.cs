@@ -39,6 +39,9 @@ public class LedgeGrabbing : MonoBehaviour
     public float exitLedgeTime;
     private float exitLedgeTimer;
 
+    [Header("Sound")]
+    public AudioSource jumpSound;
+
     private void Update()
     {
         LedgeDetection();
@@ -60,7 +63,11 @@ public class LedgeGrabbing : MonoBehaviour
 
             if (timeOnLedge > minTimeOnLedge && anyInputKeyPressed) ExitLedgeHold();
 
-            if (Input.GetKeyDown(jumpKey)) LedgeJump();
+            if (Input.GetKeyDown(jumpKey))
+            {
+                LedgeJump();
+                jumpSound.Play();
+            }
         }
 
         // Substate 2 - Exiting Ledge

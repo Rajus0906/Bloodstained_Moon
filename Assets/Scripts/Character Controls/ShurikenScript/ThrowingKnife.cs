@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using Unity.VisualScripting.Dependencies.NCalc;
 
 public class ThrowingKnife : MonoBehaviour
 {
@@ -8,9 +10,10 @@ public class ThrowingKnife : MonoBehaviour
     public Transform cam;
     public Transform attackPoint;
     public GameObject objectToThrow;
+    public TMP_Text totalThrowsLeft;
 
     [Header("Settings")]
-    public int totalThrows;
+    public int totalThrows = 10;
     public float throwCooldown;
 
     [Header("Throwing")]
@@ -31,6 +34,9 @@ public class ThrowingKnife : MonoBehaviour
         {
             Throw();
         }
+
+        // Update throws UI
+        UpdateThrowsUI();
     }
 
     private void Throw()
@@ -43,12 +49,25 @@ public class ThrowingKnife : MonoBehaviour
         //get rigidbody componet
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
+        //calculate direction
+        Vector3 forceDirection = cam.transform.forward;
+
+        RaycastHit hit;
+
+        if(Physics.Raycast(cam.position,cam.forward, out hit, 500f))
+        {
+            forceDirection = (hit.point - attackPoint.position).normalized;
+        }
+
+
         // add force
-        Vector3 forceToAdd = cam.transform.forward * throwForce + transform.up * throwUpWardsForce;
+        Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpWardsForce;
 
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
 
         totalThrows--;
+
+        
 
         //implement throw cool down
         Invoke(nameof(ResetThrow), throwCooldown);
@@ -59,4 +78,30 @@ public class ThrowingKnife : MonoBehaviour
     {
         readyToThrow = true;
     }
-}
+
+    private void UpdateThrowsUI()
+    {
+        totalThrowsLeft.text = totalThrows.ToString();
+    }
+
+
+
+    public void RefillAmmo(int amount)
+    {
+        totalThrows += amount;
+        // Update UI or perform any other actions needed
+        UpdateThrowsUI();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        AmmoPickup ammoPickup = other.GetComponent<AmmoPickup>();
+
+        if (ammoPickup != null)
+        {
+            RefillAmmo(ammoPickup.pickupAmount);
+            Destroy(ammoPickup.gameObject); // Destroy the ammo pickup object
+        }
+    }
+ }
+

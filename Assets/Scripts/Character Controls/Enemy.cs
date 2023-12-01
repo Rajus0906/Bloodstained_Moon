@@ -26,6 +26,9 @@ public class Enemy : MonoBehaviour
     private float playerVisableTimer;
     Color originalSLColour;
 
+    [Header("Stats")]
+    public int health;
+
     public float timeToSpotPlayer = .5f;
 
     private bool isChasingPlayer = false; // Add a flag to determine if the enemy is chasing the player
@@ -201,6 +204,14 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, transform.forward * viewDistace);
 
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+            Destroy(gameObject);
     }
 
    

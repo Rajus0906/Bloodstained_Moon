@@ -44,6 +44,10 @@ public class Climbing : MonoBehaviour
     public float exitWallTime;
     private float exitWallTimer;
 
+    [Header("Sound Effects")]
+    public AudioSource jumpSound;
+    public AudioSource runSound;
+
     private void Start()
     {
         lg = GetComponent<LedgeGrabbing>();
