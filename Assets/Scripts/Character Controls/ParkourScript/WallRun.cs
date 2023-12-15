@@ -40,6 +40,7 @@ public class WallRunning : MonoBehaviour
 
     [Header("References")]
     public Transform orientation;
+    public FPCam cam;
     private PlayerMovement pm;
     private Rigidbody rb;
     private LedgeGrabbing lg;
@@ -135,8 +136,18 @@ public class WallRunning : MonoBehaviour
     private void StartWallRun()
     {
         pm.wallrunning = true;
-        
-        
+
+        //appying Camera effects
+        cam.DoFov(90f);
+
+        if (wallLeft) cam.DoTilt(-5f);
+
+        if (wallRight) cam.DoTilt(5f);
+
+
+
+
+
     }
 
     private void WallRunningMovement()
@@ -168,6 +179,11 @@ public class WallRunning : MonoBehaviour
     private void StopWallRun()
     {
         pm.wallrunning = false;
+
+        //resets the Camera effects
+        cam.DoFov(80f);
+        cam.DoTilt(0f);
+
         
     }
 

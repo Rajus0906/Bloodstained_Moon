@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 615211802793628350}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -65.64, y: 6.77, z: 10.33}
-  m_LocalScale: {x: 0.8723058, y: 0.8723058, z: 0.8723058}
+  m_LocalScale: {x: 0.8723058, y: 0.95927465, z: 0.94858336}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5498064103084854075}
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 6349569690879457260}
   - {fileID: 6048795204363664249}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2231019579706016856
 GameObject:
@@ -55,6 +55,7 @@ GameObject:
   - component: {fileID: 7297808896873700006}
   - component: {fileID: 3590428031155675862}
   - component: {fileID: 3313705108950321520}
+  - component: {fileID: 8353793730569267631}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -205,6 +206,7 @@ MonoBehaviour:
   minJumpHeight: 2
   exitWallTime: 0.2
   orientation: {fileID: 6505800021212398188}
+  cam: {fileID: 2701189741866024838}
   jumpSound: {fileID: 2399444264314458365}
   runSound: {fileID: 5584856484420343577}
 --- !u!114 &3395572289870344760
@@ -475,7 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff129ca600503b48a81228363006e69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnPoint: {x: -68.61, y: 7.226, z: 12.473}
+  respawnPoint: {x: -162.2098, y: 117.95, z: -23.91}
 --- !u!114 &3590428031155675862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +511,103 @@ MonoBehaviour:
   throwKey: 323
   throwForce: 70
   throwUpWardsForce: 0
+  throwSound: {fileID: 8353793730569267631}
+--- !u!82 &8353793730569267631
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2231019579706016856}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 6808ed52a50b57944ab8197ac713af21, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.36
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 216
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3872407202800402822
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,6 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 6505800021212398188}
+  camHolder: {fileID: 6716516491769734256}
   sensX: 250
   sensY: 250
   screenPosition: {x: 0, y: 0, z: 0}
@@ -1541,7 +1641,7 @@ Transform:
   m_GameObject: {fileID: 8796639453434347302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3139938, y: 1, z: 1.2033266}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5498064103084854075}

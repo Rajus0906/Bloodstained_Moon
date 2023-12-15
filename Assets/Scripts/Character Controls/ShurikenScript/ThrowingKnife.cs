@@ -11,6 +11,7 @@ public class ThrowingKnife : MonoBehaviour
     public Transform attackPoint;
     public GameObject objectToThrow;
     public TMP_Text totalThrowsLeft;
+    
 
     [Header("Settings")]
     public int totalThrows = 10;
@@ -23,6 +24,9 @@ public class ThrowingKnife : MonoBehaviour
 
     bool readyToThrow;
 
+    [Header("Sound Effects")]
+    public AudioSource throwSound;
+
     private void Start()
     {
         readyToThrow = true;
@@ -33,6 +37,8 @@ public class ThrowingKnife : MonoBehaviour
         if(Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
         {
             Throw();
+
+            throwSound.Play();
         }
 
         // Update throws UI
